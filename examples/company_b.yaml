@@ -1,0 +1,64 @@
+# Model B - established furniture manufacturer (thesis Chapter 5), ANONYMISED
+#
+# The company is confidential. To prevent identification, every EUR amount in this
+# file is the thesis figure multiplied by an undisclosed factor and rounded to the
+# nearest EUR 10,000. Rates, percentages, distributions and the model logic are
+# exactly as in the thesis, so all ratios (WACC, margins, TV share, coefficient of
+# variation, percentiles relative to the base case, rank correlations) are preserved
+# up to the rounding. Valuation date 31 December 2024; amounts in (scaled) EUR.
+
+name: "Model B - established furniture manufacturer (Company B, anonymised)"
+short_name: company_b
+currency: EUR
+valuation_date: "2024-12-31"
+tax_rate: 0.15
+
+cost_of_capital:                     # thesis Table 11
+  risk_free_rate: 0.0353             # EUR rate from government securities data, end-2024
+  equity_risk_premium: 0.05          # Kroll recommended US ERP
+  country_risk_premium: 0.03413      # Damodaran, Serbia, January 2025
+  unlevered_beta: 0.56               # Furniture & home furnishings, US, 52 firms, January 2025
+  debt_to_equity: 0.92212            # industry average D/E (Damodaran)
+  specific_risk_premium: 0.04        # medium-sized private company
+  pre_tax_cost_of_debt: 0.06558      # National Bank of Serbia, lending rates to enterprises
+  wacc_override: 0.11                # computed WACC 10.96% is rounded to 11.0% in the model
+
+projection:                          # thesis Tables 10, 12 and 13 (scaled)
+  years: [2025, 2026, 2027, 2028, 2029]
+  method: ebit_margin                # EBIT = revenue x EBIT margin of the plan
+  base_year_revenue: 34960000       # 2024 actual
+  revenue: [37710000, 39600000, 41580000, 42830000, 43680000]
+  ebit: [860000, 900000, 910000, 900000, 900000]
+  depreciation: 70000                   # equal to maintenance capex every year
+  capex: 70000
+  net_working_capital:
+    method: levels                   # receivables + inventories - operating payables
+    opening: 2060000                       # 31 December 2024
+    levels: [7940000, 7760000, 7730000, 7660000, 7510000]
+
+terminal_value:
+  growth: 0.02
+  discounting: same_as_last_year     # TV = FCF_2029 x (1+g) / (WACC - g), exponent 4.5
+
+equity_bridge:
+  cash_and_financial_placements: 2420000
+  receivables_from_state_funds: 10000
+  tax_liabilities: -290000
+  financial_debt: 0
+
+monte_carlo:                         # thesis Table 15
+  runs: 100000
+  seed: 20260927
+  tornado_percentiles: [10, 90]
+  thresholds: [5000000, 7500000]
+  variables:                         # drawn in this order
+    revenue_growth_deviation: {distribution: normal, mean: 0.0, sd: 0.02}
+    ebit_margin_shift: {distribution: normal, mean: 0.0, sd: 0.003}
+    wacc: {distribution: normal, mean: base, sd: 0.005, clip: [0.08, 0.14]}
+    terminal_growth: {distribution: triangular, min: 0.014, mode: 0.02, max: 0.026}
+
+sensitivity:
+  wacc: [0.10, 0.105, 0.11, 0.115, 0.12]                          # Figure 12
+  terminal_growth: [0.01, 0.015, 0.02, 0.025, 0.03]
+  scenario_wacc: [0.107, 0.108, 0.109, 0.11, 0.111, 0.112, 0.113]  # Table 14, 7 x 7 grid
+  scenario_growth: [0.014, 0.016, 0.018, 0.02, 0.022, 0.024, 0.026]

@@ -1,0 +1,34 @@
+# --- Thesis folder: ONLY the public, redacted PDF and the README are published.
+# Everything else in thesis/ (the original .docx, source spreadsheets, business plans,
+# working scripts) is confidential and must never be committed.
+thesis/*
+!thesis/README.md
+!thesis/Master_Thesis_Milan_Stamenovic_public.pdf
+
+# Spreadsheets and office documents anywhere in the repo
+*.xlsx
+*.xlsm
+*.xls
+*.docx
+*.doc
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Outputs of the CLI (docs/images is committed on purpose)
+output/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

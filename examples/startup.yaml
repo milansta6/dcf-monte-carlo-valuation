@@ -1,0 +1,66 @@
+# Model A - pre-revenue software start-up (thesis Chapter 4)
+#
+# TPTM Solutions, a company founded by the author that develops cloud software
+# for transfer pricing documentation. Valuation date May 2026; the launch
+# half-year 2026 is not discounted, its closing cash balance enters the
+# equity bridge instead (thesis Section 4.5). All amounts in EUR.
+
+name: "Model A - pre-revenue software start-up (TPTM Solutions)"
+short_name: startup
+currency: EUR
+valuation_date: "2026-05"
+tax_rate: 0.15                       # Serbian corporate income tax, art. 39 CIT Law
+
+cost_of_capital:                     # thesis Table 5
+  risk_free_rate: 0.0311             # 10-year German Bund, March 2026
+  equity_risk_premium: 0.0423        # Damodaran implied ERP, January 2026
+  country_risk_premium: 0.039        # Damodaran, Serbia (Moody's Ba2), January 2026
+  unlevered_beta: 1.23               # Software (System & Application), US, 309 firms
+  debt_to_equity: 0.0                # no debt at the valuation date -> WACC = cost of equity
+  specific_risk_premium: 0.11
+  specific_risk_components:          # documented build-up of the 11 pp premium
+    pre_revenue_status: 0.07
+    key_person_risk: 0.015
+    niche_market: 0.02
+    technology_dependence: 0.015
+    product_stickiness: -0.01
+  pre_tax_cost_of_debt: 0.0
+
+projection:                          # thesis Tables 4 and 6 (full-precision values of the model)
+  years: [2027, 2028, 2029, 2030, 2031]
+  method: cost_build_up              # EBITDA = revenue - variable costs - fixed costs
+  revenue: [33984.0, 166233.4, 371714.316, 617693.78738, 960324.5779479]
+  variable_costs: [16765, 13029, 14667, 16017, 21429]          # cloud, AI services, data collection
+  fixed_costs:                                                 # personnel + other opex incl. marketing and contingency
+    [60439.0, 84271.42857142852, 169675.42857142817, 189886.7142857139, 208265.99999999965]
+  depreciation: [833, 20833, 21667, 22667, 23833]
+  capex: [3000, 120000, 5000, 6000, 7000]                      # platform development, capitalised
+  net_working_capital:
+    method: flows                    # annual increase in NWC; negative = cash inflow
+    investment: [-4342, -16450, -26172, -31280, -43861]        # subscriptions paid in advance
+
+terminal_value:
+  growth: 0.02                       # euro area long-run inflation target
+  fcf_growth: 0.03                   # terminal-year FCF = 2031 FCF x 1.03 (model convention)
+  fcf_override: 682054               # base case: the 2032 FCF the spreadsheet built line by line (Table 6)
+  discounting: one_year_after_last_year   # TV discounted with exponent 5.5, as in the spreadsheet
+
+equity_bridge:
+  cash_end_2026: 43486.2             # projected closing cash of the launch half-year
+  financial_debt: 0.0
+
+monte_carlo:                         # thesis Table 8
+  runs: 100000
+  seed: 20260927
+  tornado_percentiles: [10, 90]
+  thresholds: [500000, 2000000]
+  variables:                         # drawn in this order
+    revenue_deviation: {distribution: normal, mean: 0.0, sd: 0.10}
+    fixed_cost_deviation: {distribution: normal, mean: 0.0, sd: 0.10}
+    wacc: {distribution: normal, mean: base, sd: 0.025, clip: [0.15, 0.35]}
+    terminal_growth: {distribution: triangular, min: 0.01, mode: 0.02, max: 0.03}
+
+sensitivity:
+  wacc_offsets: [-0.08, -0.06, -0.04, -0.02, 0.0, 0.02, 0.04, 0.06, 0.08]    # Table 7
+  wacc: [0.181099, 0.201099, 0.221099, 0.241099, 0.261099, 0.281099, 0.301099]  # Figure 6
+  terminal_growth: [0.0, 0.01, 0.02, 0.03, 0.04]

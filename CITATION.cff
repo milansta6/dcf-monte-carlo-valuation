@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this code or refer to the thesis, please cite it as below."
+title: "Company Valuation Using the Discounted Cash Flow Method and Monte Carlo Simulation"
+type: software
+authors:
+  - family-names: "Stamenović"
+    given-names: "Milan"
+version: 1.0.0
+date-released: 2026-11-16
+license: MIT
+repository-code: "https://github.com/milansta6/dcf-monte-carlo-valuation"
+keywords:
+  - company valuation
+  - discounted cash flow
+  - Monte Carlo simulation
+  - cost of capital
+  - Serbia
+preferred-citation:
+  type: thesis
+  thesis-type: "Master's thesis"
+  title: "Company Valuation Using the Discounted Cash Flow Method and Monte Carlo Simulation"
+  authors:
+    - family-names: "Stamenović"
+      given-names: "Milan"
+  institution:
+    name: "Union University, School of Computing"
+    city: "Belgrade"
+    country: "RS"
+  year: 2026
+  notes: "Master in Computer Science - Computational Finance. Mentor: Prof. dr Branko Urošević."
